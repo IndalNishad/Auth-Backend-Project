@@ -18,3 +18,13 @@ export const registerSchema =
     .refine((data) => data.password === data.confirmPassword, {
         message: "Passwords do not match",
     });
+
+export const loginSchema = z.object({
+    email: z
+        .string()
+        .trim()
+        .email("Please provide a valid email"),
+    password: z
+        .string()
+        .min(1, "Password is required")
+});

@@ -31,8 +31,9 @@ This project is being developed step by step to understand how modern authentica
 * ☑ Check if email already exists
 * ☑ Password hashing
 * ☑ Create user in MongoDB
-* ☐ Global error handling
-* ☐ Login API
+* ☑ Global error handling
+* ☑ Login API
+* ☑ Password verification
 * ☐ Authentication middleware
 * ☐ JWT authentication
 * ☐ Refresh token handling
@@ -57,7 +58,8 @@ src/
 │   └── auth.controller.js
 │
 ├── middlewares/
-│   └── validate.middleware.js
+│   ├── validate.middleware.js
+│   └── error.middleware.js
 │
 ├── models/
 │   └── user.model.js
@@ -132,13 +134,59 @@ Safe Response
 * ☑ Password hashes are not returned in API responses
 * ☑ Duplicate email registration is prevented
 
+## Login API
+
+### Endpoint
+
+```http
+POST /auth/login
+```
+
+### Request Body
+
+```json
+{
+  "email": "user@example.com",
+  "password": "Password@123"
+}
+```
+
+### Login Flow
+
+```text
+Client
+  ↓
+POST /auth/login
+  ↓
+Validation Middleware
+  ↓
+Login Controller
+  ↓
+Find User by Email
+  ↓
+Compare Password
+  ↓
+Password Valid?
+  ↓
+Login Successful
+```
+
+### Current Login Features
+
+* ☑ Email validation
+* ☑ Password validation
+* ☑ Find user by email
+* ☑ Invalid credentials handling
+* ☑ Password verification using bcrypt
+* ☑ Generic authentication error message
+
 ## Environment Variables
 
 The application uses environment variables for configuration.
 
 Create a `.env` file in the project root and configure the required variables locally.
 
-**Never commit `.env` or any secrets to GitHub.**
+**Never commit** **`.env`** **or any secrets to GitHub.**
 
 ## Installation
 
@@ -158,7 +206,7 @@ The server runs on the configured port.
 
 ## API Testing
 
-The registration API can be tested using tools such as:
+The APIs can be tested using tools such as:
 
 * Postman
 * Thunder Client
@@ -186,6 +234,27 @@ The registration API can be tested using tools such as:
 }
 ```
 
+### Successful Login
+
+```json
+{
+  "success": true,
+  "message": "Login successful",
+  "data": {
+    "email": "user@example.com"
+  }
+}
+```
+
+### Invalid Login
+
+```json
+{
+  "success": false,
+  "message": "Invalid email or password"
+}
+```
+
 ## Development Approach
 
 ```text
@@ -206,9 +275,9 @@ Each feature is developed and tested before moving to the next feature.
 
 ## Project Status
 
-**Current:** Registration API is implemented with validation, duplicate email checking, password hashing, and MongoDB user creation.
+**Current:** Registration and login APIs are implemented with request validation, duplicate email checking, password hashing, password verification, MongoDB user creation, and global error handling.
 
-**Next:** Global error handling → Login API → Authentication middleware → JWT authentication.
+**Next:** Authentication middleware → JWT authentication → Protected routes.
 
 ## Authentication Roadmap
 
@@ -217,9 +286,9 @@ Each feature is developed and tested before moving to the next feature.
 * ☑ Duplicate email checking
 * ☑ Password hashing
 * ☑ User creation
-* ☐ Global error handling
-* ☐ Login
-* ☐ Password verification
+* ☑ Global error handling
+* ☑ Login
+* ☑ Password verification
 * ☐ JWT authentication
 * ☐ Authentication middleware
 * ☐ Protected routes
