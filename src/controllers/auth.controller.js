@@ -1,20 +1,37 @@
+import { checkExistingUser , hashPassword, createUser} from "../services/auth.service.js";
+
 export const register = async (req, res) => {
     try {
-        const {email, password, confirmpassword } = req.body;
+        const { email, password } = req.body;
 
-        res.status(201).json({
+        const existingUser = await checkExistingUser(email);
+
+        if (existingUser) {
+            return res.status(409).json({
+                success: false,
+                message: "Email is already registered",
+            });
+        }
+
+        const hashedPassword = await hashPassword(password);
+
+        const user = await createUser(email, hashedPassword);
+
+        return res.status(201).json({
             success: true,
             message: "User registered successfully",
             data: {
-                email,
-                password,
-                confirmpassword
-            }
+                id: user._id,
+                email: user.email,
+            },
         });
-    }catch (error) {
-        res.status(500).json({
+
+    } catch (error) {
+        console.error("Registration error:", error);
+
+        return res.status(500).json({
             success: false,
-            message: "Internal server error"
+            message: "Internal server error",
         });
     }
-}
+};

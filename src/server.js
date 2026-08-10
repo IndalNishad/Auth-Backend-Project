@@ -3,6 +3,7 @@ import { config } from './config/env.js';
 import { connectDB } from './config/db.js';
 
 connectDB();
+
 const port = config.PORT;
 
 app.listen(port, () =>{

@@ -11,6 +11,7 @@ This project is being developed step by step to understand how modern authentica
 * MongoDB
 * Mongoose
 * Zod
+* bcrypt
 * JavaScript (ES Modules)
 
 ## Current Progress
@@ -23,12 +24,13 @@ This project is being developed step by step to understand how modern authentica
 * ☑ Git/GitHub setup
 * ☑ Authentication routes
 * ☑ Authentication controller
+* ☑ Authentication service
 * ☑ Registration API
 * ☑ Request validation with Zod
 * ☑ Password confirmation validation
-* ☐ Check if email already exists
-* ☐ Password hashing
-* ☐ Create user in MongoDB
+* ☑ Check if email already exists
+* ☑ Password hashing
+* ☑ Create user in MongoDB
 * ☐ Global error handling
 * ☐ Login API
 * ☐ Authentication middleware
@@ -67,6 +69,7 @@ src/
 │   └── auth.validator.js
 │
 ├── services/
+│   └── auth.service.js
 │
 ├── app.js
 └── server.js
@@ -90,6 +93,28 @@ POST /auth/register
 }
 ```
 
+### Registration Flow
+
+```text
+Client
+  ↓
+POST /auth/register
+  ↓
+Validation Middleware
+  ↓
+Registration Controller
+  ↓
+Check Existing Email
+  ↓
+Hash Password
+  ↓
+Create User
+  ↓
+MongoDB
+  ↓
+Safe Response
+```
+
 ### Current Validation
 
 * ☑ Email is required
@@ -99,6 +124,13 @@ POST /auth/register
 * ☑ Password maximum length validation
 * ☑ Confirm password validation
 * ☑ Password matching validation
+
+### Security
+
+* ☑ Passwords are hashed using bcrypt
+* ☑ Plain-text passwords are not stored
+* ☑ Password hashes are not returned in API responses
+* ☑ Duplicate email registration is prevented
 
 ## Environment Variables
 
@@ -110,6 +142,8 @@ Create a `.env` file in the project root and configure the required variables lo
 
 ## Installation
 
+Clone the repository and install dependencies:
+
 ```bash
 npm install
 ```
@@ -118,6 +152,38 @@ npm install
 
 ```bash
 npm run dev
+```
+
+The server runs on the configured port.
+
+## API Testing
+
+The registration API can be tested using tools such as:
+
+* Postman
+* Thunder Client
+* Insomnia
+
+### Successful Registration
+
+```json
+{
+  "success": true,
+  "message": "User registered successfully",
+  "data": {
+    "id": "user-id",
+    "email": "user@example.com"
+  }
+}
+```
+
+### Duplicate Email
+
+```json
+{
+  "success": false,
+  "message": "Email is already registered"
+}
 ```
 
 ## Development Approach
@@ -136,8 +202,33 @@ Commit
 Push
 ```
 
+Each feature is developed and tested before moving to the next feature.
+
 ## Project Status
 
-**Current:** Registration API with request validation.
+**Current:** Registration API is implemented with validation, duplicate email checking, password hashing, and MongoDB user creation.
 
-**Next:** Check existing email → hash password → create user in MongoDB.
+**Next:** Global error handling → Login API → Authentication middleware → JWT authentication.
+
+## Authentication Roadmap
+
+* ☑ User registration
+* ☑ Input validation
+* ☑ Duplicate email checking
+* ☑ Password hashing
+* ☑ User creation
+* ☐ Global error handling
+* ☐ Login
+* ☐ Password verification
+* ☐ JWT authentication
+* ☐ Authentication middleware
+* ☐ Protected routes
+* ☐ Refresh tokens
+* ☐ Logout
+* ☐ Role-based authorization
+* ☐ Email verification
+* ☐ Forgot/reset password
+* ☐ Rate limiting
+* ☐ Security hardening
+* ☐ Google OAuth / OpenID Connect
+* ☐ Account linking
