@@ -1,6 +1,6 @@
 # Backend Authentication System
 
-A modern authentication backend built with **Node.js, Express.js, MongoDB, Mongoose, and Zod**.
+A modern authentication backend built with **Node.js, Express.js, MongoDB, Mongoose, Zod, bcrypt, and JWT**.
 
 This project is being developed step by step to understand how modern authentication systems are designed, implemented, and secured.
 
@@ -12,6 +12,7 @@ This project is being developed step by step to understand how modern authentica
 * Mongoose
 * Zod
 * bcrypt
+* JSON Web Token (JWT)
 * JavaScript (ES Modules)
 
 ## Current Progress
@@ -34,8 +35,9 @@ This project is being developed step by step to understand how modern authentica
 * ☑ Global error handling
 * ☑ Login API
 * ☑ Password verification
+* ☑ JWT token generation
 * ☐ Authentication middleware
-* ☐ JWT authentication
+* ☐ Protected routes
 * ☐ Refresh token handling
 * ☐ Logout
 * ☐ Role-based authorization
@@ -168,7 +170,9 @@ Compare Password
   ↓
 Password Valid?
   ↓
-Login Successful
+Generate JWT
+  ↓
+Return Access Token
 ```
 
 ### Current Login Features
@@ -179,6 +183,36 @@ Login Successful
 * ☑ Invalid credentials handling
 * ☑ Password verification using bcrypt
 * ☑ Generic authentication error message
+* ☑ JWT access token generation
+* ☑ JWT expiration configuration
+
+## JWT Authentication
+
+JWT is currently generated after successful login.
+
+### JWT Flow
+
+```text
+Valid Credentials
+      ↓
+Generate JWT
+      ↓
+Access Token
+      ↓
+Client
+      ↓
+Future Protected Requests
+      ↓
+JWT Authentication Middleware
+```
+
+### Current JWT Features
+
+* ☑ JWT package integration
+* ☑ Access token generation
+* ☑ User ID included in token payload
+* ☑ JWT secret loaded from environment variables
+* ☑ Token expiration configured
 
 ## Environment Variables
 
@@ -241,7 +275,8 @@ The APIs can be tested using tools such as:
   "success": true,
   "message": "Login successful",
   "data": {
-    "email": "user@example.com"
+    "email": "user@example.com",
+    "accessToken": "JWT_ACCESS_TOKEN"
   }
 }
 ```
@@ -275,9 +310,9 @@ Each feature is developed and tested before moving to the next feature.
 
 ## Project Status
 
-**Current:** Registration and login APIs are implemented with request validation, duplicate email checking, password hashing, password verification, MongoDB user creation, and global error handling.
+**Current:** Registration and login APIs are implemented with request validation, duplicate email checking, password hashing, password verification, MongoDB user creation, global error handling, and JWT access token generation.
 
-**Next:** Authentication middleware → JWT authentication → Protected routes.
+**Next:** JWT authentication middleware → Protected routes → Refresh tokens.
 
 ## Authentication Roadmap
 
@@ -289,7 +324,7 @@ Each feature is developed and tested before moving to the next feature.
 * ☑ Global error handling
 * ☑ Login
 * ☑ Password verification
-* ☐ JWT authentication
+* ☑ JWT authentication
 * ☐ Authentication middleware
 * ☐ Protected routes
 * ☐ Refresh tokens

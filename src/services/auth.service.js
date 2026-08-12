@@ -1,5 +1,8 @@
+import jwt from "jsonwebtoken";
+import {config} from "../config/env.js";
 import bcrypt from "bcrypt";
 import User from "../models/user.model.js";
+
 
 export const checkExistingUser = async (email) => {
     const existingUser = await User.findOne({ email });
@@ -22,3 +25,12 @@ export const createUser = async (email, passwordHash) => {
 
     return user;
 };
+export const generateToken = (user) => {
+    const token = jwt.sign(
+        { id: user._id, email: user.email },
+        config.JWT_SECRET,
+        { expiresIn: "1h" }
+    );
+
+    return token;
+}
