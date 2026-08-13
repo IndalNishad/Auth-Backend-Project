@@ -1,5 +1,5 @@
-import jwt from "jsonwebtoken";
-import {config} from "../config/env.js";
+// import jwt from "jsonwebtoken";
+// import {config} from "../config/env.js";
 import bcrypt from "bcrypt";
 import User from "../models/user.model.js";
 
@@ -25,12 +25,12 @@ export const createUser = async (email, passwordHash) => {
 
     return user;
 };
-export const generateToken = (user) => {
-    const token = jwt.sign(
-        { id: user._id, email: user.email },
-        config.JWT_SECRET,
-        { expiresIn: "1h" }
+
+export const comparePassword = async (password, passwordHash) => {
+    const isPasswordValid = await bcrypt.compare(
+        password,
+        passwordHash
     );
 
-    return token;
-}
+    return isPasswordValid;
+};
