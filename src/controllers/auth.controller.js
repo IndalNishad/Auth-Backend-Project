@@ -48,8 +48,27 @@ export const login = async (req, res, next) => {
             success: true,
             message: "Login successful",
             data: {
+                id: existingUser._id,
                 email: email,
                 accessToken: accessToken,
+            },
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const profile = async (req, res, next) => {
+    try {
+        const user = req.user;
+
+        return res.status(200).json({
+            success: true,
+            message: "User profile retrieved successfully",
+            data: {
+                id: user.id,
+                email: user.email,
             },
         });
 

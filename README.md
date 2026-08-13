@@ -36,8 +36,8 @@ This project is being developed step by step to understand how modern authentica
 * ☑ Login API
 * ☑ Password verification
 * ☑ JWT token generation
-* ☐ Authentication middleware
-* ☐ Protected routes
+* ☑ Authentication middleware
+* ☑ Protected profile route
 * ☐ Refresh token handling
 * ☐ Logout
 * ☐ Role-based authorization
@@ -61,7 +61,8 @@ src/
 │
 ├── middlewares/
 │   ├── validate.middleware.js
-│   └── error.middleware.js
+│   ├── error.middleware.js
+│   └── auth.middleware.js
 │
 ├── models/
 │   └── user.model.js
@@ -188,22 +189,26 @@ Return Access Token
 
 ## JWT Authentication
 
-JWT is currently generated after successful login.
-
 ### JWT Flow
 
 ```text
-Valid Credentials
-      ↓
+Login
+  ↓
+Verify Credentials
+  ↓
 Generate JWT
-      ↓
-Access Token
-      ↓
-Client
-      ↓
-Future Protected Requests
-      ↓
-JWT Authentication Middleware
+  ↓
+Return Access Token
+  ↓
+Client Sends Bearer Token
+  ↓
+Authentication Middleware
+  ↓
+Verify JWT
+  ↓
+Attach User Information to Request
+  ↓
+Protected Route
 ```
 
 ### Current JWT Features
@@ -213,6 +218,54 @@ JWT Authentication Middleware
 * ☑ User ID included in token payload
 * ☑ JWT secret loaded from environment variables
 * ☑ Token expiration configured
+* ☑ JWT verification
+* ☑ Bearer token validation
+* ☑ Invalid/expired token handling
+* ☑ Authenticated user attached to `req.user`
+
+## Protected Profile API
+
+### Endpoint
+
+```http
+GET /auth/profile
+```
+
+### Authorization
+
+```text
+Authorization: Bearer <access-token>
+```
+
+### Profile Flow
+
+```text
+Client
+  ↓
+GET /auth/profile
+  ↓
+Authorization Header
+  ↓
+Authentication Middleware
+  ↓
+JWT Verification
+  ↓
+req.user
+  ↓
+Profile Controller
+  ↓
+User Profile Response
+```
+
+### Current Protected Route Features
+
+* ☑ Authentication required
+* ☑ Bearer token validation
+* ☑ JWT verification
+* ☑ Invalid token handling
+* ☑ Expired token handling
+* ☑ Authenticated user identification
+* ☑ Protected profile endpoint
 
 ## Environment Variables
 
@@ -290,6 +343,19 @@ The APIs can be tested using tools such as:
 }
 ```
 
+### Successful Profile Request
+
+```json
+{
+  "success": true,
+  "message": "User profile retrieved successfully",
+  "data": {
+    "id": "user-id",
+    "email": "user@example.com"
+  }
+}
+```
+
 ## Development Approach
 
 ```text
@@ -310,9 +376,9 @@ Each feature is developed and tested before moving to the next feature.
 
 ## Project Status
 
-**Current:** Registration and login APIs are implemented with request validation, duplicate email checking, password hashing, password verification, MongoDB user creation, global error handling, and JWT access token generation.
+**Current:** Registration, login, JWT authentication, authentication middleware, and protected profile API are implemented and tested.
 
-**Next:** JWT authentication middleware → Protected routes → Refresh tokens.
+**Next:** Refresh token handling → Logout → Role-based authorization.
 
 ## Authentication Roadmap
 
@@ -325,8 +391,8 @@ Each feature is developed and tested before moving to the next feature.
 * ☑ Login
 * ☑ Password verification
 * ☑ JWT authentication
-* ☐ Authentication middleware
-* ☐ Protected routes
+* ☑ Authentication middleware
+* ☑ Protected routes
 * ☐ Refresh tokens
 * ☐ Logout
 * ☐ Role-based authorization
